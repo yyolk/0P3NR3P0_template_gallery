@@ -44,19 +44,35 @@ here's a basic ajax setup calling the 0P3NR3P0. Make sure to use [jsonp](http://
 
 in this template we use jQuery's [.each() method](http://api.jquery.com/each/) to iterate through the data, here's an example:
 
-              $.each(data, function() {
+                var slides = [];
+                $.each(data, function() {
                     $.each(this, function(key, val){
                          $.each(this, function(k, v){
-                            if(v.title != undefined) { // only grab pieces
-                                v.url;                 // is the piece url 
-                                v.title;               // is the title
-                                v.description;         // is the description
-                                v.author;              // is the author
-                                v.homepage_url;        // is the author's homepage
+                            // there will be 3 items returned at this level
+
+                            // k == 'id' // the creation date (useful for ordering)
+                            // k == 'key' // the url of the piece used in the db
+                            // k == 'value' // piece-object::
+
+                            // the piece object stores everythin using a javascript object
+                            // Grab only the pieces
+                            if (k == 'value') slides.push(k);
+                            
+                            // then each item has the following
+                            console.log('url: %s',
+                                v.url);                 // is the piece url 
+                            console.log('title: %s',    
+                                v.title);               // is the title
+                            console.log('description: %s:',
+                                v.description);         // is the description
+                            console.log('author: %s',
+                                v.author);              // is the author
+                            console.log('homepage_url: %s',
+                                v.homepage_url);        // is the author's homepage
                             }
                          });
                     });                    
                 });
 
 
-here's a [sample web gallery](http://gli.tc/h/0P3NR3P0_sample_gallery/) we made along these lines
+[Heres a sample page for your conveinence](http://gli.tc/h/0P3NR3P0_sample_gallery/)
