@@ -110,9 +110,7 @@
                 $.each(data, function(){
                     $.each(this, function(){
                         $.each(this, function(k,v){
-                            try{ 
-                                if (v.url) slides.push(v);
-                             } catch(err){}//do nothing
+                            if (k=='value') slides.push(v);
                         });
                     });
                 });
