@@ -199,7 +199,6 @@
         
         function go(){
             t = $('#secs').val()*1000;
-            gallery.shuffle();
             gallery.next(gallery);
             setInterval("gallery.next(gallery)", t);
         }
