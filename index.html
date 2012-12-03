@@ -92,73 +92,69 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
     <script>
     
-        var url =[];                    // the work url
-        var title = [];                 // the title of the work
-        var nfo =[];                    // the description of the work
-        var auth = [];                  // the author[s] of the work
-        var auth_url = [];              // the author[s] webpage
+        var slides = [];
         
         var i = 0;                      // item number for arrays
         var t = $('#secs').val()*1000;  // time spent per work
         var isNfo = false;
         
+        $.ajax({
+            url: 'https://glitch.iriscouch.com/openrepo/_design/0P3NR3P0/_view/recent-items',
+            type: 'get',
+            dataType: 'jsonp',
+            success: function(data) {
+                console.log("banging the server!!");
 
-        // this ajax function populates the arrays above with all the entires in the 0P3NR3P0
-        //$.ajax({
-        //    url: 'https://glitch.iriscouch.com/openrepo/_design/0P3NR3P0/_view/recent-items',
-        //    type: 'get',
-        //    dataType: 'jsonp',
-        //    success: function(data) {            
-        //        $.each(data, function() {
-        //            $.each(this, function(key, val){
-        //                 $.each(this, function(k, v){
-        //                    if(v.title != undefined) {
-        //                        url.push(v.url);
-        //                        title.push(v.title);
-        //                        nfo.push(v.description);
-        //                        auth.push(v.author);
-        //                        auth_url.push(v.homepage_url);
-        //                    }
-        //                 });
-        //            });                    
-        //        });
-        //    }
-        //  });
-          $.getJSON("https://glitch.iriscouch.com/openrepo/_design/0P3NR3P0/_list/works/recent-items", function(data){
+                $.each(data, function(){
+                    $.each(this, function(){
+                        $.each(this, function(k,v){
+                            if (k=='value') slides.push(v);
+                        });
+                    });
+                });
+            }
+        });
+        
+        function reset() {
+            i=0;
+            // shuffle items
+        }
+            
 
-            $.each(data, function(k,v){
 
-              console.log(this);
-              if (this.title != undefined){
-                url.push(this.url);
-                title.push(this.title);
-                nfo.push(this.description);
-                auth.push(this.author);
-                auth_url.push(this.homepage_url);
-              }
-          });}); 
         function runGallery() {
             t = $('#secs').val()*1000; 
-            l = url.length;
+            // count slides
+            l = slides.length;
             
+            //run animation
             $('body').css('backgroundColor','#fff');
             
+
+            // i is always the current iteration of the slideshow we're on
             $('#banner').fadeOut(300);
-            $('#frame').attr('src', url[i]);
-            $('#leftNfo').html('<a class="title" href="'+url[i]+'">'+title[i]+'</a><br> by <a class="author" href="'+auth_url[i]+'">'+auth[i]+'</a>');
-            $('#rightNfo').html(nfo[i]); 
+            $('#frame').attr('src', slides[i].url);
+            $('#leftNfo').html('<a class="title" href="'+slides[i].url+'">'+slides[i].title+'</a><br> by <a class="author" href="'+slides[i].homepage_url+'">'+slides[i].author+'</a>');
+            $('#rightNfo').html(slides[i].description); 
             $('#nfo_wrap').slideDown(500).delay(3000).slideUp(500);
             
-            setInterval(function () {
-                i++; if(i>=l){i=0;}
-                $('#frame').attr('src', url[i]);
-                $('#leftNfo').html('<a class="title" href="'+url[i]+'">'+title[i]+'</a><br> by <a class="author" href="'+auth_url[i]+'">'+auth[i]+'</a>');
-                $('#rightNfo').html(nfo[i]);
-                $('#nfo_wrap').slideDown(500).delay(3000).slideUp(500);
-                isNfo = false;
-            }, t);
-            
+
+            return{
+                //event-based
+                next: function () {
+                    if (i>l) reset();
+                    console.log(i);
+                    $('#frame').attr('src', slides[i].url); // set the iframe url
+                    $('#leftNfo').html('<a class="title" href="'+slides[i].url+'">'+slides[i].title+'</a><br> by <a class="author" href="'+slides[i].homepage_url+'">'+slides[i].author+'</a>');
+                    $('#rightNfo').html(slides[i].description);
+                    $('#nfo_wrap').slideDown(500).delay(3000).slideUp(500);
+                    isNfo = false;
+                    i++;
+                }
+            }
         }
+        //event based
+        setInterval("runGallery().next()", t);
             
         // toggle the piece info when [ i ] is clicked    
         document.onkeypress=function(e){
