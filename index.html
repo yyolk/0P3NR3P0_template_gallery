@@ -80,7 +80,7 @@
         piece interval <input id="secs" value="10"> seconds<br>
         press the [ i ] key to toggle piece info
         <br><br>
-        <div id="enter" onclick="runGallery()">Enter Gallery</div>
+        <div id="enter" onclick="go()">Enter Gallery</div>
         
     </div>
 
@@ -97,9 +97,33 @@
         var i = 0;                      // item number for arrays
         var t = $('#secs').val()*1000;  // time spent per work
         var isNfo = false;
+        var gallery = new Gallery();
+        var l = 0;
+        console.log('i: %s',i);
         
+        function grabLatest(){
+            //empty the slides
+            slides=[];
+            // this ajax function populates the arrays above with all the entires in the 0P3NR3P0
+            $.ajax({
+                url: 'https://glitch.iriscouch.com/openrepo/_design/0P3NR3P0/_view/recent-items',
+                type: 'get',
+                dataType: 'jsonp',
+                success: function(data) {
+                    console.log("banging the server!!");
 
-        // this ajax function populates the arrays above with all the entires in the 0P3NR3P0
+                    $.each(data, function(){
+                        $.each(this, function(){
+                            $.each(this, function(k,v){
+                                if (k=='value') slides.push(v);
+                            });
+                        });
+                    });
+                }
+            });
+            l = slides.length;
+        }
+        
         $.ajax({
             url: 'https://glitch.iriscouch.com/openrepo/_design/0P3NR3P0/_view/recent-items',
             type: 'get',
@@ -116,48 +140,73 @@
                 });
             }
         });
-        
-        function reset() {
-            i=0;
-            // shuffle items
-        }
-            
 
-    
-        function runGallery() {
-            t = $('#secs').val()*1000; 
-            // count slides
-            l = slides.length;
+        function Gallery() {
+            //event based
             
-            //run animation
-            $('body').css('backgroundColor','#fff');
+            var i = 0;
+            var l = 100;
             
-
-            // i is always the current iteration of the slideshow we're on
-            $('#banner').fadeOut(300);
-            $('#frame').attr('src', slides[i].url);
-            $('#leftNfo').html('<a class="title" href="'+slides[i].url+'">'+slides[i].title+'</a><br> by <a class="author" href="'+slides[i].homepage_url+'">'+slides[i].author+'</a>');
-            $('#rightNfo').html(slides[i].description); 
-            $('#nfo_wrap').slideDown(500).delay(3000).slideUp(500);
-            
-
             return{
                 //event-based
-                next: function () {
-                    if (i>l) reset();
-                    console.log(i);
+                draw: function(){
+                    //run animation
+                    $('body').css('backgroundColor','#fff');
+                    
+
+                    // i is always the current iteration of the slideshow we're on
+                    $('#banner').fadeOut(300);
+                    $('#frame').attr('src', slides[i].url);
+                    $('#leftNfo').html('<a class="title" href="'+slides[i].url+'">'+slides[i].title+'</a><br> by <a class="author" href="'+slides[i].homepage_url+'">'+slides[i].author+'</a>');
+                    $('#rightNfo').html(slides[i].description); 
+                    $('#nfo_wrap').slideDown(500).delay(3000).slideUp(500);   
+                },
+                shuffle: function(){
+                    /**
+                     * Randomize array element order in-place.
+                     * Using Fisher-Yates shuffle algorithm.
+                     */
+                    function shuffleArray(array) {
+                        for (var i = array.length - 1; i > 0; i--) {
+                            var j = Math.floor(Math.random() * (i + 1));
+                            var temp = array[i];
+                            array[i] = array[j];
+                            array[j] = temp;
+                        }
+                        return array;
+                    }
+                    slides = shuffleArray(slides);
+                },
+                reset: function(){
+                    gallery.shuffle();
+                    i=0;
+                },
+                next: function (gallery) {
+                    l = slides.length;
+                    gallery.draw();
+                    //console.log(i);
                     $('#frame').attr('src', slides[i].url); // set the iframe url
                     $('#leftNfo').html('<a class="title" href="'+slides[i].url+'">'+slides[i].title+'</a><br> by <a class="author" href="'+slides[i].homepage_url+'">'+slides[i].author+'</a>');
                     $('#rightNfo').html(slides[i].description);
                     $('#nfo_wrap').slideDown(500).delay(3000).slideUp(500);
                     isNfo = false;
                     i++;
+                    if (i>l) gallery.reset();
                 }
             }
+
         }
-        //event based
-        setInterval("runGallery().next()", t);
-            
+        
+        function go(){
+            t = $('#secs').val()*1000;
+            gallery.shuffle();
+            gallery.next(gallery);
+            setInterval("gallery.next(gallery)", t);
+        }
+        
+        
+        // grabLatest();
+
         // toggle the piece info when [ i ] is clicked    
         document.onkeypress=function(e){
             var e=window.event || e
@@ -170,8 +219,8 @@
              
     </script>
 
-    
-    <iframe id="frame" height="100%" width="100%" allowfullscreen/> <!-- this iframe rotates between pieces in the 0P3NR3P0 -->
+    <!-- this iframe rotates between pieces in the 0P3NR3P0 -->
+    <iframe id="frame" height="100%" width="100%" allowfullscreen/>
 
 
 </body>
