@@ -56,7 +56,7 @@ in this template we use jQuery's [.each() method](http://api.jquery.com/each/) t
 
                             // the piece object stores everythin using a javascript object
                             // Grab only the pieces
-                            if (k == 'value') slides.push(k);
+                            if (k == 'value') slides.push(v);
                             
                             // then each item has the following
                             console.log('url: %s',
