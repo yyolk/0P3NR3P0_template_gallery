@@ -31,48 +31,52 @@ here's an example for how you might setup some global variables to store this da
 
 here's a basic ajax setup calling the 0P3NR3P0. Make sure to use [jsonp](http://en.wikipedia.org/wiki/JSONP) as you'll be requesting data from a server in a different domain
 
-        $.ajax({
-            url: 'https://glitch.iriscouch.com/openrepo/_design/0P3NR3P0/_view/recent-items',
-            type: 'get',
-            dataType: 'jsonp',
-            success: function(data) {            
-                // loop through the data here
-            }
-        });
+```javascript
+$.ajax({
+    url: 'https://glitch.iriscouch.com/openrepo/_design/0P3NR3P0/_view/recent-items',
+    type: 'get',
+    dataType: 'jsonp',
+    success: function(data) {            
+        // loop through the data here
+    }
+});
+```
 
 ### // loop through the data
 
 in this template we use jQuery's [.each() method](http://api.jquery.com/each/) to iterate through the data, here's an example:
 
-                var slides = [];
-                $.each(data, function() {
-                    $.each(this, function(key, val){
-                         $.each(this, function(k, v){
-                            // there will be 3 items returned at this level
+```javascript
+var slides = [];
+$.each(data, function() {
+    $.each(this, function(key, val){
+         $.each(this, function(k, v){
+            // there will be 3 items returned at this level
 
-                            // k == 'id' // the creation date (useful for ordering)
-                            // k == 'key' // the url of the piece used in the db
-                            // k == 'value' // piece-object::
+            // k == 'id' // the creation date (useful for ordering)
+            // k == 'key' // the url of the piece used in the db
+            // k == 'value' // piece-object::
 
-                            // the piece object stores everythin using a javascript object
-                            // Grab only the pieces
-                            if (k == 'value') slides.push(v);
-                            
-                            // then each item has the following
-                            console.log('url: %s',
-                                v.url);                 // is the piece url 
-                            console.log('title: %s',    
-                                v.title);               // is the title
-                            console.log('description: %s:',
-                                v.description);         // is the description
-                            console.log('author: %s',
-                                v.author);              // is the author
-                            console.log('homepage_url: %s',
-                                v.homepage_url);        // is the author's homepage
-                            }
-                         });
-                    });                    
-                });
+            // the piece object stores everythin using a javascript object
+            // Grab only the pieces
+            if (k == 'value') slides.push(v);
+            
+            // then each item has the following
+            console.log('url: %s',
+                v.url);                 // is the piece url 
+            console.log('title: %s',    
+                v.title);               // is the title
+            console.log('description: %s:',
+                v.description);         // is the description
+            console.log('author: %s',
+                v.author);              // is the author
+            console.log('homepage_url: %s',
+                v.homepage_url);        // is the author's homepage
+            }
+         });
+    });                    
+});
+```
 
 
 [Heres a sample page for your conveinence](http://gli.tc/h/0P3NR3P0_sample_gallery/)
