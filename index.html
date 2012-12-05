@@ -146,6 +146,7 @@
                 next: function () {
                     if (i>l) reset();
                     console.log(i);
+                    console.log(sids[i]);
                     framesrc = $.ajax({
                         url: "http://glitch.iriscouch.com/openrepo/_design/0P3NR3P0/_show/post/"+ sids[i],
                         type: 'get',
