@@ -97,7 +97,6 @@
         var i = 0;                      // item number for arrays
         var t = $('#secs').val()*1000;  // time spent per work
         var isNfo = false;
-        var gallery = new Gallery();
         var l = 0;
         console.log('i: %s',i);
         
@@ -201,7 +200,7 @@
 
         function go(){
             t = $("#secs").val()*1000;
-            gallery = runGallery();
+            gallery = Gallery();
             setInterval("gallery.next()", t);
         }
         //event based
