@@ -89,7 +89,7 @@
     </div>
 
 
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
     <script>
     
         var slides = [];
@@ -148,25 +148,20 @@
                     console.log(i);
                     console.log(sids[i]);
                     graburl = "http://glitch.iriscouch.com/openrepo/_design/0P3NR3P0/_show/post/"+sids[i];
-                    framesrc = $.ajax({
+                    jQuery.ajax({
                         url: graburl,
                         type: 'get',
-                        sucess: function(data){
-                            return data;
+                        success: function(data) {
+                            console.log('Load was performed.');
+                        },
+                        error: function(err){
+                            graburl = slides[i].url;
                         }
-                        }.sucess(function(){
-                            console.log(framesrc.responseText);
-                        }
-                            ));
+                    });
+
                     
-                    if (framesrc.responseText){ 
-                        //$('#frame').attr('src', "http://glitch.iriscouch.com/openrepo/_design/0P3NR3P0/_show/post/"+ sids[i]); 
-                        $('#frame').attr('src', '');
-                        $('#frame').wrtite(framesrc.responseText);
-                        $('#frame').close();
-                    } else {
-                        $('#frame').attr('src', slides[i].url); // set the iframe url
-                    }
+                    $('#frame').attr('src', graburl); // set the iframe url
+                    
                     $('#leftNfo').html('<a class="title" href="'+slides[i].url+'">'+slides[i].title+'</a><br> by <a class="author" href="'+slides[i].homepage_url+'">'+slides[i].author+'</a>');
                     $('#rightNfo').html(slides[i].description);
                     $('#nfo_wrap').slideDown(500).delay(3000).slideUp(500);
