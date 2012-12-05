@@ -148,7 +148,7 @@
                     // i is always the current iteration of the slideshow we're on
                     $('#banner').fadeOut(300);
                     $('#frame').attr('src', slides[i].url);
-                    $('#leftNfo').html('<a class="title" href="'+slides[i].url+'">'+slides[i].title+'</a><br> by <a class="author" href="'+slides[i].homepage_url+'">'+slides[i].author+'</a>');
+                    $('#leftNfo').html('<a class="title" href="http://glitch.iriscouch.com/openrepo/_design/0P3NR3P0/_show/post/'+slides[i]._id+'">'+slides[i].title+'</a><br> by <a class="author" href="'+slides[i].homepage_url+'">'+slides[i].author+'</a>');
                     $('#rightNfo').html(slides[i].description); 
                     $('#nfo_wrap').slideDown(500).delay(3000).slideUp(500);
                 }
