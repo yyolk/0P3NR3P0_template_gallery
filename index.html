@@ -98,7 +98,7 @@
         var t = $('#secs').val()*1000;  // time spent per work
         var isNfo = false;
         $ = jQuery;
-        $.ajax({
+        jQuery.ajax({
             url: 'https://glitch.iriscouch.com/openrepo/_design/0P3NR3P0/_view/recent-items',
             type: 'get',
             dataType: 'jsonp',
@@ -147,15 +147,18 @@
                     if (i>l) reset();
                     console.log(i);
                     console.log(sids[i]);
-
+                    graburl = "http://glitch.iriscouch.com/openrepo/_design/0P3NR3P0/_show/post/"+sids[i];
                     framesrc = $.ajax({
-                        url: "http://glitch.iriscouch.com/openrepo/_design/0P3NR3P0/_show/post/"+ sids[i],
+                        url: graburl,
                         type: 'get',
                         sucess: function(data){
                             return data;
                         }
-                        });
-                    console.log(framesrc.responseText);
+                        }.sucess(function(){
+                            console.log(framesrc.responseText);
+                        }
+                            ));
+                    
                     if (framesrc.responseText){ 
                         //$('#frame').attr('src', "http://glitch.iriscouch.com/openrepo/_design/0P3NR3P0/_show/post/"+ sids[i]); 
                         $('#frame').attr('src', '');
