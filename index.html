@@ -89,11 +89,11 @@
     </div>
 
 
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
     <script>
     
         var slides = [];
-        
+        var sids = [];
         var i = 0;                      // item number for arrays
         var t = $('#secs').val()*1000;  // time spent per work
         var isNfo = false;
@@ -134,58 +134,62 @@
                 $.each(data, function(){
                     $.each(this, function(){
                         $.each(this, function(k,v){
+                            
                             if (k=='value') slides.push(v);
+                            if (k=='id') sids.push(v);
                         });
                     });
                 });
             }
         });
 
+
         function Gallery() {
             //event based
+
+
+        function runGallery() {
+            t = $('#secs').val()*1000; 
+            // count slides
+            l = slides.length;
+
             
             var i = 0;
             var l = 100;
             
+
+            // i is always the current iteration of the slideshow we're on
+            $('#banner').fadeOut(300);
+            $('#frame').attr('src', "http://glitch.iriscouch.com/openrepo/_design/0P3NR3P0/_show/post/"+ sids[i]);
+            $('#leftNfo').html('<a class="title" href="'+slides[i].url+'">'+slides[i].title+'</a><br> by <a class="author" href="'+slides[i].homepage_url+'">'+slides[i].author+'</a>');
+            $('#rightNfo').html(slides[i].description); 
+            $('#nfo_wrap').slideDown(500).delay(3000).slideUp(500);
+            
+
             return{
                 //event-based
-                draw: function(){
-                    //run animation
-                    $('body').css('backgroundColor','#fff');
-                    
+                next: function () {
+                    if (i>l) reset();
+                    console.log(i);
+                    console.log(sids[i]);
 
-                    // i is always the current iteration of the slideshow we're on
-                    $('#banner').fadeOut(300);
-                    $('#frame').attr('src', slides[i].url);
-                    $('#leftNfo').html('<a class="title" href="'+slides[i].url+'">'+slides[i].title+'</a><br> by <a class="author" href="'+slides[i].homepage_url+'">'+slides[i].author+'</a>');
-                    $('#rightNfo').html(slides[i].description); 
-                    $('#nfo_wrap').slideDown(500).delay(3000).slideUp(500);   
-                },
-                shuffle: function(){
-                    /**
-                     * Randomize array element order in-place.
-                     * Using Fisher-Yates shuffle algorithm.
-                     */
-                    function shuffleArray(array) {
-                        for (var i = array.length - 1; i > 0; i--) {
-                            var j = Math.floor(Math.random() * (i + 1));
-                            var temp = array[i];
-                            array[i] = array[j];
-                            array[j] = temp;
+                    framesrc = $.ajax({
+                        url: "http://glitch.iriscouch.com/openrepo/_design/0P3NR3P0/_show/post/"+ sids[i],
+                        type: 'get',
+                        sucess: function(data){
+                            return data;
                         }
-                        return array;
+                        });
+                    console.log(framesrc.responseText);
+                    if (framesrc.responseText){ 
+                        //$('#frame').attr('src', "http://glitch.iriscouch.com/openrepo/_design/0P3NR3P0/_show/post/"+ sids[i]); 
+                        $('#frame').attr('src', '');
+                        $('#frame').wrtite(framesrc.responseText);
+                        $('#frame').close();
+                    } else {
+                        $('#frame').attr('src', slides[i].url); // set the iframe url
                     }
-                    slides = shuffleArray(slides);
-                },
-                reset: function(){
-                    gallery.shuffle();
-                    i=0;
-                },
-                next: function (gallery) {
-                    l = slides.length;
-                    gallery.draw();
-                    //console.log(i);
-                    $('#frame').attr('src', slides[i].url); // set the iframe url
+
                     $('#leftNfo').html('<a class="title" href="'+slides[i].url+'">'+slides[i].title+'</a><br> by <a class="author" href="'+slides[i].homepage_url+'">'+slides[i].author+'</a>');
                     $('#rightNfo').html(slides[i].description);
                     $('#nfo_wrap').slideDown(500).delay(3000).slideUp(500);
@@ -196,15 +200,16 @@
             }
 
         }
-        
+
+
         function go(){
-            t = $('#secs').val()*1000;
-            gallery.next(gallery);
-            setInterval("gallery.next(gallery)", t);
+            t = $("#secs").val()*1000;
+            gallery = runGallery();
+            setInterval("gallery.next()", t);
         }
+        //event based
         
-        
-        // grabLatest();
+            
 
         // toggle the piece info when [ i ] is clicked    
         document.onkeypress=function(e){
@@ -215,7 +220,7 @@
                 $('#nfo_wrap').slideUp(500); isNfo = false;
             }
         }
-             
+          
     </script>
 
     <!-- this iframe rotates between pieces in the 0P3NR3P0 -->
