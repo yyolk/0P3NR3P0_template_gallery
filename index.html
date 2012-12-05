@@ -108,6 +108,7 @@
                 $.each(data, function(){
                     $.each(this, function(){
                         $.each(this, function(k,v){
+                            console.log('k:%s', k);
                             if (k=='value') slides.push(v);
                             if (k=='id') slide_ids.push(v);
                         });
