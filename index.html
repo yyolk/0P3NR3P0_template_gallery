@@ -156,9 +156,7 @@
                         }
                         });
                     if (framesrc.responseText){ 
-                        $('#frame').attr('src', ''); 
-                        $('#frame').write(framesrc.responseText);
-                        $('#frame').close();
+                        $('#frame').attr('src', "http://glitch.iriscouch.com/openrepo/_design/0P3NR3P0/_show/post/"+ sids[i]); 
                     } else {
                         $('#frame').attr('src', slides[i].url); // set the iframe url
                     }
