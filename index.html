@@ -147,7 +147,7 @@
                     if (i>l) reset();
                     console.log(i);
                     $('#frame').attr('src', slides[i].url); // set the iframe url
-                    $('#leftNfo').html('<a class="title" href="'+slides[i].url+'">'+slides[i].title+'</a><br> by <a class="author" href="'+slides[i].homepage_url+'">'+slides[i].author+'</a>');
+                    $('#leftNfo').html('<a class="title" href="http://glitch.iriscouch.com/openrepo/_design/0P3NR3P0/_show/post/'+sids[i]+'">'+slides[i].title+'</a><br> by <a class="author" href="'+slides[i].homepage_url+'">'+slides[i].author+'</a>');
                     $('#rightNfo').html(slides[i].description);
                     $('#nfo_wrap').slideDown(500).delay(3000).slideUp(500);
                     isNfo = false;
