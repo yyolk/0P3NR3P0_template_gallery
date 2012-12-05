@@ -101,28 +101,28 @@
         var l = 0;
         console.log('i: %s',i);
         
-        function grabLatest(){
+        
             //empty the slides
-            slides=[];
-            // this ajax function populates the arrays above with all the entires in the 0P3NR3P0
-            $.ajax({
-                url: 'https://glitch.iriscouch.com/openrepo/_design/0P3NR3P0/_view/recent-items',
-                type: 'get',
-                dataType: 'jsonp',
-                success: function(data) {
-                    console.log("banging the server!!");
+        // slides=[];
+        // this ajax function populates the arrays above with all the entires in the 0P3NR3P0
+        $.ajax({
+            url: 'https://glitch.iriscouch.com/openrepo/_design/0P3NR3P0/_view/recent-items',
+            type: 'get',
+            dataType: 'jsonp',
+            success: function(data) {
+                console.log("banging the server!!");
 
-                    $.each(data, function(){
-                        $.each(this, function(){
-                            $.each(this, function(k,v){
-                                if (k=='value') slides.push(v);
-                            });
+                $.each(data, function(){
+                    $.each(this, function(){
+                        $.each(this, function(k,v){
+                            if (k=='value') slides.push(v);
                         });
                     });
-                }
-            });
-            l = slides.length;
-        }
+                });
+            }
+        });
+        l = slides.length;
+        
         
         $.ajax({
             url: 'https://glitch.iriscouch.com/openrepo/_design/0P3NR3P0/_view/recent-items',
