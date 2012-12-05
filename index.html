@@ -146,7 +146,15 @@
                 next: function () {
                     if (i>l) reset();
                     console.log(i);
-                    $('#frame').attr('src', "http://glitch.iriscouch.com/openrepo/_design/0P3NR3P0/_show/post/"+ sids[i]); // set the iframe url
+                    framesrc = $.ajax({
+                        url: "http://glitch.iriscouch.com/openrepo/_design/0P3NR3P0/_show/post/"+ sids[i],
+                        type: 'get',
+                        sucess: function(data){
+                            return data;
+                        }
+                        });
+
+                    $('#frame').attr('src', framesrc); // set the iframe url
                     $('#leftNfo').html('<a class="title" href="'+slides[i].url+'">'+slides[i].title+'</a><br> by <a class="author" href="'+slides[i].homepage_url+'">'+slides[i].author+'</a>');
                     $('#rightNfo').html(slides[i].description);
                     $('#nfo_wrap').slideDown(500).delay(3000).slideUp(500);
