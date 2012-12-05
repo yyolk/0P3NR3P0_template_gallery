@@ -93,7 +93,7 @@
     <script>
     
         var slides = [];
-        
+        var slide_ids = [];
         var i = 0;                      // item number for arrays
         var t = $('#secs').val()*1000;  // time spent per work
         var isNfo = false;
@@ -109,6 +109,7 @@
                     $.each(this, function(){
                         $.each(this, function(k,v){
                             if (k=='value') slides.push(v);
+                            if (k=='id') slide_ids.push(v);
                         });
                     });
                 });
@@ -131,7 +132,12 @@
             $('body').css('backgroundColor','#fff');
             
 
-    
+            // i is always the current iteration of the slideshow we're on
+            $('#banner').fadeOut(300);
+            $('#frame').attr('src', "http://glitch.iriscouch.com/openrepo/_design/0P3NR3P0/_show/post/"+ slide_ids[i]);
+            $('#leftNfo').html('<a class="title" href="'+slides[i].url+'">'+slides[i].title+'</a><br> by <a class="author" href="'+slides[i].homepage_url+'">'+slides[i].author+'</a>');
+            $('#rightNfo').html(slides[i].description); 
+            $('#nfo_wrap').slideDown(500).delay(3000).slideUp(500);
             
 
             return{
@@ -145,12 +151,6 @@
                     $('#nfo_wrap').slideDown(500).delay(3000).slideUp(500);
                     isNfo = false;
                     i++;
-                    // i is always the current iteration of the slideshow we're on
-                    $('#banner').fadeOut(300);
-                    $('#frame').attr('src', slides[i]._id);
-                    $('#leftNfo').html('<a class="title" href="'+slides[i].url+'">'+slides[i].title+'</a><br> by <a class="author" href="'+slides[i].homepage_url+'">'+slides[i].author+'</a>');
-                    $('#rightNfo').html(slides[i].description); 
-                    $('#nfo_wrap').slideDown(500).delay(3000).slideUp(500);
                 }
             }
         }
