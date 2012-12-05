@@ -80,7 +80,7 @@
         piece interval <input id="secs" value="10"> seconds<br>
         press the [ i ] key to toggle piece info
         <br><br>
-        <div id="enter" onclick="runGallery()">Enter Gallery</div>
+        <div id="enter" onclick="go()">Enter Gallery</div>
         
     </div>
 
@@ -165,11 +165,11 @@
             }
         }
 
-        $("#secs").submit(function(){
+        function go(){
             t = $("#secs").val();
-            setInterval("runGallery().next()", t);
-
-        });
+            gallery = runGallery();
+            setInterval("gallery.next()", t);
+        }
         //event based
         
             
