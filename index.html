@@ -117,9 +117,10 @@
             }
         });
         
-        function reset() {
+        function resetGallery() {
             i=0;
             // shuffle items
+            i=Math.floor(Math.random()*l);
         }
             
 
@@ -128,7 +129,6 @@
             t = $('#secs').val()*1000; 
             // count slides
             l = slides.length;
-            
             //run animation
             $('body').css('backgroundColor','#fff');
             
@@ -145,6 +145,7 @@
                 //event-based
                 next: function () {
                     if (i>l) reset();
+
                     console.log(i);
                     console.log(sids[i]);
                     graburl = "http://glitch.iriscouch.com/openrepo/_design/0P3NR3P0/_show/post/"+sids[i];
@@ -173,7 +174,9 @@
 
         function go(){
             t = $("#secs").val();
+
             gallery = runGallery();
+            resetGallery();
             setInterval("gallery.next()", t);
         }
         //event based
